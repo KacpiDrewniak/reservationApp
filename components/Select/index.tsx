@@ -27,6 +27,7 @@ const Select = ({ items, value, setValue, label }: SelectType) => (
           bg: "teal.600",
           endIcon: <CheckIcon size="5" />,
         }}
+        // nasluchujemy na zmiane jesli klikmniemy w coś z listy za pomocą setValue zmienimy stan w komponencei App.tsx
         onValueChange={(itemValue) => setValue(itemValue)}
       >
         {items.map((props) => (
