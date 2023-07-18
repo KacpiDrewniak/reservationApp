@@ -6,8 +6,8 @@ import { containerAppBarStyles } from "./styles";
 
 const AppBar = ({ title }: AppBarType) => (
   <>
-    <StatusBar backgroundColor="violet.600" barStyle="light-content" />
-    <Box safeAreaTop bg="violet.600" width="100%" />
+    <StatusBar backgroundColor="blue.500" barStyle="light-content" />
+    <Box safeAreaTop bg="blue.500" width="100%" />
     <HStack {...containerAppBarStyles}>
       <HStack alignItems="center">
         <IconButton
