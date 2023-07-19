@@ -1,61 +1,28 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Button, Icon, NativeBaseProvider } from "native-base";
-import AppBar from "./components/AppBar";
-import Layout from "./components/Layout";
-import Select from "./components/Select";
-import { cities } from "./contants/cities";
-import { countries } from "./contants/countries";
-import { Dimensions } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import BottomNavigator from "./components/BottomNavigator";
+import * as React from "react";
+import { Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Home from "./screens/Home";
+import Notifications from "./screens/Notifications";
 
-const { width } = Dimensions.get("window");
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
+}
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  // tutaj przechowujemy obecne wybrane miasto ( na początku jest to pusty string )
-  const [city, setCity] = useState("");
-  // tutaj przechowujemy obecne wybrane państwo ( na początku jest to pusty string )
-  const [country, setCountry] = useState("");
-
-  useEffect(() => {
-    console.log("start app useEffect");
-    // funkcja uruchomi sie tak samo jak componentDiDMount
-  }, []);
-
-  useLayoutEffect(() => {
-    console.log("start app useLayoutEffect");
-    // funkcja uruchomi sie po wyrenderowaniu layoutu
-  });
-
   return (
-    <NativeBaseProvider>
-      <AppBar title="Rezerwacje" />
-      <Layout>
-        <Select
-          value={city}
-          setValue={setCity}
-          items={cities}
-          label="Choose city"
-        />
-        <Select
-          // przekazujemy stan i funkcję do jego zmiany jako parametr do komponentu select
-          value={country}
-          setValue={setCountry}
-          items={countries}
-          label="Choose country"
-        />
-        <Button
-          width={width / 1.5}
-          size="lg"
-          leftIcon={<Icon as={Ionicons} name="search" />}
-          // tutaj on press wywołuje funkcje
-          onPress={() => console.log("hello world")}
-        >
-          Szukaj
-        </Button>
-      </Layout>
-      <BottomNavigator />
-    </NativeBaseProvider>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Notifications" component={Notifications} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
