@@ -3,25 +3,41 @@ import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
-import Notifications from "./screens/Notifications";
+import Reservations from "./screens/Reservations";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-}
-
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Notifications" component={Notifications} />
-      </Stack.Navigator>
+      <Tab.Navigator>
+        <Tab.Screen
+          options={{
+            tabBarLabel: "Home",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="home" color={color} size={26} />
+            ),
+          }}
+          name="Home"
+          component={Home}
+        />
+        <Tab.Screen
+          options={{
+            tabBarLabel: "Reservations",
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons
+                name="clipboard-list"
+                color={color}
+                size={26}
+              />
+            ),
+          }}
+          name="Reservations"
+          component={Reservations}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };

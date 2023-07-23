@@ -52,7 +52,7 @@ const BottomNavigator = () => {
           <Center>
             <Icon
               mb="1"
-              as={<MaterialIcons name="cart" />}
+              as={<MaterialCommunityIcons name="clipboard-list" />}
               color="white"
               size="lg"
             />

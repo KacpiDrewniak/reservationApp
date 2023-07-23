@@ -20,16 +20,6 @@ const Home = () => {
   // tutaj przechowujemy obecne wybrane państwo ( na początku jest to pusty string )
   const [country, setCountry] = useState("");
 
-  useEffect(() => {
-    console.log("start app useEffect");
-    // funkcja uruchomi sie tak samo jak componentDiDMount
-  }, []);
-
-  useLayoutEffect(() => {
-    console.log("start app useLayoutEffect");
-    // funkcja uruchomi sie po wyrenderowaniu layoutu
-  });
-
   return (
     <NativeBaseProvider>
       <AppBar title="Rezerwacje" />
@@ -51,8 +41,6 @@ const Home = () => {
           width={width / 1.5}
           size="lg"
           leftIcon={<Icon as={Ionicons} name="search" />}
-          // tutaj on press wywołuje funkcje
-          onPress={() => console.log("hello world")}
         >
           Szukaj
         </Button>
@@ -60,13 +48,11 @@ const Home = () => {
           mt={2}
           width={width / 1.5}
           size="lg"
-          // tutaj on press wywołuje funkcje
-          onPress={() => navigation.navigate("Notifications")}
+          onPress={() => navigation.navigate("Reservations" as never)}
         >
-          Go to notification screen
+          Go to reservations screen
         </Button>
       </Layout>
-      <BottomNavigator />
     </NativeBaseProvider>
   );
 };
