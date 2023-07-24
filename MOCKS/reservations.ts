@@ -1,42 +1,11 @@
 import { Reservation } from "../types/reservation";
 
-export const reservations: Reservation[] = [
+export const historicReservations: Reservation[] = [
   {
-    counter: 1,
-    status: "Oczekiwanie na potwierdzenie płatności.",
-    paymentUrl: "www.linkToPay1.com",
-    reservationId: 1,
-    objectId: 7,
-    objectSlug: "object_www_6",
-    objectName: "object name 1",
-    clientId: 18,
-    name: "name_17",
-    surname: "surname_17",
-    phone: "507507517",
-    createdByName: "name_us_5",
-    createdBySurname: "surname_us_5",
-    createdByEmail: "username_5@teest.pl",
-    payed: false,
-    payedDesc: "Nie",
-    price: 321.0,
-    date: "2022-10-04",
-    dayOfWeek: "Wtorek",
-    dateStart: "2022-10-04 09:30:00",
-    dateStop: "2022-10-04 09:30:00",
-    hourStart: "09:30",
-    hourStop: "10:00",
-    totalHours: 0.0,
-    roomId: 1,
-    roomName: "sala 1",
-    createdAt: "2022-10-04 11:11:11",
-    deleted: false,
-    deletedAt: "",
-  },
-  {
-    counter: 2,
+    counter: 5,
     status: "Brak potiwerdzenia płatności.",
     paymentUrl: "",
-    reservationId: 22,
+    reservationId: 25,
     objectId: 7,
     objectSlug: "object_www_6",
     objectName: "object name 1",
@@ -50,78 +19,16 @@ export const reservations: Reservation[] = [
     payed: false,
     payedDesc: "Nie",
     price: 123.0,
-    date: "2022-10-03",
-    dayOfWeek: "Poniedziałek",
-    dateStart: "2022-10-03 09:30:00",
-    dateStop: "2022-10-03 09:30:00",
+    date: "2022-09-30",
+    dayOfWeek: "Piątek",
+    dateStart: "2022-09-30 09:30:00",
+    dateStop: "2022-09-30 09:30:00",
     hourStart: "09:30",
     hourStop: "10:00",
     totalHours: 0.0,
     roomId: 1,
     roomName: "sala 1",
-    createdAt: "2022-10-03 11:11:11",
-    deleted: false,
-    deletedAt: "",
-  },
-  {
-    counter: 3,
-    status: "Rezerwacja opłacona.",
-    paymentUrl: "",
-    reservationId: 23,
-    objectId: 7,
-    objectSlug: "object_www_6",
-    objectName: "object name 1",
-    clientId: 18,
-    name: "name_17",
-    surname: "surname_17",
-    phone: "507507517",
-    createdByName: "name_us_5",
-    createdBySurname: "surname_us_5",
-    createdByEmail: "username_5@teest.pl",
-    payed: true,
-    payedDesc: "Nie",
-    price: 123.0,
-    date: "2022-10-02",
-    dayOfWeek: "Niedziela",
-    dateStart: "2022-10-02 09:30:00",
-    dateStop: "2022-10-02 09:30:00",
-    hourStart: "09:30",
-    hourStop: "10:00",
-    totalHours: 0.0,
-    roomId: 1,
-    roomName: "sala 1",
-    createdAt: "2022-10-02 11:11:11",
-    deleted: false,
-    deletedAt: "",
-  },
-  {
-    counter: 4,
-    status: "Rezerwacja opłacona.",
-    paymentUrl: "",
-    reservationId: 24,
-    objectId: 7,
-    objectSlug: "object_www_6",
-    objectName: "object name 1",
-    clientId: 18,
-    name: "name_17",
-    surname: "surname_17",
-    phone: "507507517",
-    createdByName: "name_us_5",
-    createdBySurname: "surname_us_5",
-    createdByEmail: "username_5@teest.pl",
-    payed: true,
-    payedDesc: "Nie",
-    price: 123.0,
-    date: "2022-10-01",
-    dayOfWeek: "Sobota",
-    dateStart: "2022-10-01 09:30:00",
-    dateStop: "2022-10-01 09:30:00",
-    hourStart: "09:30",
-    hourStop: "10:00",
-    totalHours: 0.0,
-    roomId: 1,
-    roomName: "sala 1",
-    createdAt: "2022-10-01 11:11:11",
+    createdAt: "2022-09-30 11:11:11",
     deleted: false,
     deletedAt: "",
   },
@@ -156,6 +63,40 @@ export const reservations: Reservation[] = [
     deleted: false,
     deletedAt: "",
   },
+  {
+    counter: 5,
+    status: "Brak potiwerdzenia płatności.",
+    paymentUrl: "",
+    reservationId: 25,
+    objectId: 7,
+    objectSlug: "object_www_6",
+    objectName: "object name 1",
+    clientId: 18,
+    name: "name_17",
+    surname: "surname_17",
+    phone: "507507517",
+    createdByName: "name_us_5",
+    createdBySurname: "surname_us_5",
+    createdByEmail: "username_5@teest.pl",
+    payed: false,
+    payedDesc: "Nie",
+    price: 123.0,
+    date: "2022-09-30",
+    dayOfWeek: "Piątek",
+    dateStart: "2022-09-30 09:30:00",
+    dateStop: "2022-09-30 09:30:00",
+    hourStart: "09:30",
+    hourStop: "10:00",
+    totalHours: 0.0,
+    roomId: 1,
+    roomName: "sala 1",
+    createdAt: "2022-09-30 11:11:11",
+    deleted: false,
+    deletedAt: "",
+  },
+];
+
+export const activeReservations: Reservation[] = [
   {
     counter: 1,
     status: "Brak potiwerdzenia płatności.",
@@ -218,6 +159,9 @@ export const reservations: Reservation[] = [
     deleted: false,
     deletedAt: "",
   },
+];
+
+export const removedReservations: Reservation[] = [
   {
     counter: 1,
     status: "Rezerwacja usunięta!",
@@ -281,7 +225,7 @@ export const reservations: Reservation[] = [
     deletedAt: "2022-10-04 12:11:11",
   },
 ];
-//  by date with date and content as array
+
 export const splitReservationsByDate = (
   reservations: Reservation[],
 ): { date: string; content: Reservation[] }[] => {
@@ -302,7 +246,6 @@ export const splitReservationsByDate = (
 };
 
 // Split reservations by date with date and content as array
-const reservationsByDate = splitReservationsByDate(reservations);
 
 const returnFlatList = (reservations: any): Reservation[] => {
   const reservationList = [];
@@ -318,4 +261,13 @@ const returnFlatList = (reservations: any): Reservation[] => {
   return reservationList as Reservation[];
 };
 
-export const MyReservations = returnFlatList(reservationsByDate);
+export const MyHistoricReservations = returnFlatList(
+  splitReservationsByDate(historicReservations),
+);
+
+export const MyActiveReservations = returnFlatList(
+  splitReservationsByDate(activeReservations),
+);
+export const MyRemovedReservations = returnFlatList(
+  splitReservationsByDate(removedReservations),
+);

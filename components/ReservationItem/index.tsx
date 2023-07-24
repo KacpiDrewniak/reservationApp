@@ -8,6 +8,7 @@ const ReservationItem = ({
   status,
   dateStart,
   dateStop,
+  createdAt,
 }: Reservation) => {
   return (
     <View style={styles.row}>
@@ -17,7 +18,11 @@ const ReservationItem = ({
       </View>
       <View style={styles.rightElement}>
         <Text style={styles.objectStyles}>{objectName}</Text>
+        <Text>Status: {status}</Text>
         <Text>{status}</Text>
+        <Text style={{ fontStyle: "italic" }}>
+          Utworzona: {moment(new Date(createdAt)).format("L")}
+        </Text>
       </View>
     </View>
   );
