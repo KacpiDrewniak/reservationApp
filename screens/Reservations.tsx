@@ -16,7 +16,7 @@ import {
 const Tab = createMaterialTopTabNavigator();
 
 const History = () => {
-  const [index, setIndex] = useState(5);
+  const [index, setIndex] = useState(10);
 
   return (
     <NativeBaseProvider>
@@ -39,7 +39,7 @@ const History = () => {
 };
 
 const Removed = () => {
-  const [index, setIndex] = useState(5);
+  const [index, setIndex] = useState(10);
 
   return (
     <NativeBaseProvider>
@@ -62,7 +62,7 @@ const Removed = () => {
 };
 
 const Incoming = () => {
-  const [index, setIndex] = useState(5);
+  const [index, setIndex] = useState(10);
 
   return (
     <NativeBaseProvider>

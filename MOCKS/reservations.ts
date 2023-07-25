@@ -256,6 +256,11 @@ const returnFlatList = (reservations: any): Reservation[] => {
     reservationList.push(...content);
     reservationList.push(...content);
     reservationList.push(...content);
+    reservationList.push(...content);
+    reservationList.push(...content);
+    reservationList.push(...content);
+    reservationList.push(...content);
+    reservationList.push(...content);
   });
 
   return reservationList as Reservation[];
