@@ -15,14 +15,19 @@ import {
 
 const Tab = createMaterialTopTabNavigator();
 
-const History = () => {
-  const [index, setIndex] = useState(10);
-
+const ReservationComponent = ({
+  reservations,
+}: {
+  reservations: Reservation[];
+}) => {
+  const [index, setIndex] = useState(5);
   return (
     <NativeBaseProvider>
       <FlatList
-        onScrollEndDrag={() => setIndex(index + 5)}
-        data={MyHistoricReservations.slice(0, index)}
+        onEndReachedThreshold={0.5}
+        onEndReached={() => setIndex(index + 5)}
+        contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
+        data={reservations.slice(0, index)}
         renderItem={({ item }) =>
           item.isDate ? (
             <Text style={styles.date}>
@@ -38,51 +43,17 @@ const History = () => {
   );
 };
 
-const Removed = () => {
-  const [index, setIndex] = useState(10);
+const Incoming = () => (
+  <ReservationComponent reservations={MyActiveReservations} />
+);
 
-  return (
-    <NativeBaseProvider>
-      <FlatList
-        onScrollEndDrag={() => setIndex(index + 5)}
-        data={MyRemovedReservations.slice(0, index)}
-        renderItem={({ item }) =>
-          item.isDate ? (
-            <Text style={styles.date}>
-              {moment(Date.parse(item.date)).format("dddd")}{" "}
-              {moment(Date.parse(item.date)).format("ll")}
-            </Text>
-          ) : (
-            <ReservationItem {...item} />
-          )
-        }
-      />
-    </NativeBaseProvider>
-  );
-};
+const History = () => (
+  <ReservationComponent reservations={MyHistoricReservations} />
+);
 
-const Incoming = () => {
-  const [index, setIndex] = useState(10);
-
-  return (
-    <NativeBaseProvider>
-      <FlatList
-        onScrollEndDrag={() => setIndex(index + 5)}
-        data={MyActiveReservations.slice(0, index)}
-        renderItem={({ item }) =>
-          item.isDate ? (
-            <Text style={styles.date}>
-              {moment(Date.parse(item.date)).format("dddd")}{" "}
-              {moment(Date.parse(item.date)).format("ll")}
-            </Text>
-          ) : (
-            <ReservationItem {...item} />
-          )
-        }
-      />
-    </NativeBaseProvider>
-  );
-};
+const Removed = () => (
+  <ReservationComponent reservations={MyRemovedReservations} />
+);
 
 const Reservations = () => {
   return (
