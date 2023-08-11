@@ -1,61 +1,95 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { FlatList, NativeBaseProvider, ScrollView } from "native-base";
-import { useState } from "react";
+import {
+  FlatList,
+  NativeBaseProvider,
+  ScrollView,
+  useLayout,
+} from "native-base";
+import { useEffect, useState } from "react";
 
 import moment from "moment";
 import { Reservation } from "../types/reservation";
 import ReservationItem from "../components/ReservationItem";
 import { MaterialIcons } from "@expo/vector-icons";
-import {
-  MyActiveReservations,
-  MyHistoricReservations,
-  MyRemovedReservations,
-} from "../MOCKS/reservations";
+import axios from "axios";
 
 const Tab = createMaterialTopTabNavigator();
 
-const ReservationComponent = ({
-  reservations,
-}: {
-  reservations: Reservation[];
-}) => {
-  const [index, setIndex] = useState(5);
+const ReservationComponent = ({ route: { params } }: any) => {
+  const [_reservations, _setReservations] = useState<Reservation[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [index, setIndex] = useState(0);
+  console.log({ isLoading });
+  useEffect(() => {
+    setIsLoading(true);
+    try {
+      (async () => {
+        const {
+          data: { content },
+        } = await axios.get(
+          `http://146.59.83.238:8086/get_objects_test?page=0&select_${index}=${params.city}&select_2=${params.country}`,
+        );
+        _setReservations([..._reservations, ...content]);
+      })();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+    }
+  }, []);
+
+  const loadAdditionalReservation = () => {
+    try {
+      (async () => {
+        const {
+          data: { content },
+        } = await axios.get(
+          `http://146.59.83.238:8086/get_objects_test?page=0&select_${index}=${params.city}&select_2=${params.country}`,
+        );
+        _setReservations([..._reservations, ...content]);
+        setIndex(index + 1);
+      })();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <NativeBaseProvider>
-      <FlatList
-        onEndReachedThreshold={0.5}
-        onEndReached={() => setIndex(index + 5)}
-        contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
-        data={reservations.slice(0, index)}
-        renderItem={({ item }) =>
-          item.isDate ? (
-            <Text style={styles.date}>
-              {moment(Date.parse(item.date)).format("dddd")}{" "}
-              {moment(Date.parse(item.date)).format("ll")}
-            </Text>
-          ) : (
-            <ReservationItem {...item} />
-          )
-        }
-      />
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          onEndReachedThreshold={0.5}
+          onEndReached={loadAdditionalReservation}
+          contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
+          data={_reservations}
+          renderItem={({ item }) =>
+            item.isDate ? (
+              <Text style={styles.date}>
+                {moment(Date.parse(item.date)).format("dddd")}{" "}
+                {moment(Date.parse(item.date)).format("ll")}
+              </Text>
+            ) : (
+              <ReservationItem {...item} />
+            )
+          }
+        />
+      )}
     </NativeBaseProvider>
   );
 };
 
-const Incoming = () => (
-  <ReservationComponent reservations={MyActiveReservations} />
-);
+const Incoming = (props: any) => <ReservationComponent {...props} />;
 
-const History = () => (
-  <ReservationComponent reservations={MyHistoricReservations} />
-);
+const History = (props: any) => <ReservationComponent {...props} />;
 
-const Removed = () => (
-  <ReservationComponent reservations={MyRemovedReservations} />
-);
+const Removed = (props: any) => <ReservationComponent {...props} />;
 
-const Reservations = () => {
+const Reservations = ({ route: { params } }) => {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -78,6 +112,7 @@ const Reservations = () => {
           ),
         }}
         name="History"
+        initialParams={params}
         component={History}
       />
       <Tab.Screen
@@ -99,6 +134,7 @@ const Reservations = () => {
             </View>
           ),
         }}
+        initialParams={params}
         name="Removed"
         component={Removed}
       />
@@ -122,6 +158,7 @@ const Reservations = () => {
           ),
         }}
         name="Incoming"
+        initialParams={params}
         component={Incoming}
       />
     </Tab.Navigator>

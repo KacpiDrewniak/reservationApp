@@ -40,17 +40,16 @@ const Home = () => {
         <Button
           width={width / 1.5}
           size="lg"
+          onPress={() =>
+            // @ts-ignore
+            navigation.navigate("Reservations", {
+              country,
+              city,
+            })
+          }
           leftIcon={<Icon as={Ionicons} name="search" />}
         >
           Szukaj
-        </Button>
-        <Button
-          mt={2}
-          width={width / 1.5}
-          size="lg"
-          onPress={() => navigation.navigate("Reservations" as never)}
-        >
-          Go to reservations screen
         </Button>
       </Layout>
     </NativeBaseProvider>
