@@ -48,6 +48,7 @@ const ReservationComponent = (props: any) => {
           _setReservations([..._reservations, ...content]);
           setIndex(index + 1);
         } else {
+          Alert.alert("No more records");
         }
       })();
     } catch (err) {
