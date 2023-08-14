@@ -28,7 +28,7 @@ const ReservationComponent = ({ route: { params } }: any) => {
         const {
           data: { content },
         } = await axios.get(
-          `http://146.59.83.238:8086/get_objects_test?page=0&select_${index}=${params.city}&select_2=${params.country}`,
+          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1=${params.city}&select_2=${params.country}`,
         );
         _setReservations([..._reservations, ...content]);
         setIndex(index + 1);
@@ -48,7 +48,7 @@ const ReservationComponent = ({ route: { params } }: any) => {
         const {
           data: { content },
         } = await axios.get(
-          `http://146.59.83.238:8086/get_objects_test?page=0&select_${index}=${params.city}&select_2=${params.country}`,
+          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1}=${params.city}&select_2=${params.country}`,
         );
         _setReservations([..._reservations, ...content]);
         setIndex(index + 1);
