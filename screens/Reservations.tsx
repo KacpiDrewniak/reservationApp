@@ -40,7 +40,7 @@ const ReservationComponent = (props: any) => {
         const {
           data: { content },
         } = await axios.get(
-          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1=${
+          `http://146.59.83.238:8086/get_objects_test?page=${0}&select_1=${
             params.city || ""
           }&select_2=${params.country || ""}`,
         );
@@ -52,7 +52,7 @@ const ReservationComponent = (props: any) => {
         }
       })();
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -67,7 +67,7 @@ const ReservationComponent = (props: any) => {
         const {
           data: { content },
         } = await axios.get(
-          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1}=${
+          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1=${
             params.city || ""
           }&select_2=${params.country || ""}`,
         );
@@ -93,29 +93,35 @@ const ReservationComponent = (props: any) => {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <FlatList
-          onEndReachedThreshold={0.5}
-          onEndReached={loadAdditionalReservation}
-          contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
-          data={_reservations}
-          renderItem={({ item, index }) => {
-            if (index + 1 === _reservations.length && localLoading) {
-              return (
-                <View style={{ height: 100 }}>
-                  <ActivityIndicator />
-                </View>
-              );
-            }
-            return item.isDate ? (
-              <Text style={styles.date}>
-                {moment(Date.parse(item.date)).format("dddd")}{" "}
-                {moment(Date.parse(item.date)).format("ll")}
-              </Text>
-            ) : (
-              <ReservationItem {...item} />
-            );
-          }}
-        />
+        <>
+          {_reservations.length ? (
+            <FlatList
+              onEndReachedThreshold={0.5}
+              onEndReached={loadAdditionalReservation}
+              contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
+              data={_reservations}
+              renderItem={({ item, index }) => {
+                if (index + 1 === _reservations.length && localLoading) {
+                  return (
+                    <View style={{ height: 100 }}>
+                      <ActivityIndicator />
+                    </View>
+                  );
+                }
+                return item.isDate ? (
+                  <Text style={styles.date}>
+                    {moment(Date.parse(item.date)).format("dddd")}{" "}
+                    {moment(Date.parse(item.date)).format("ll")}
+                  </Text>
+                ) : (
+                  <ReservationItem {...item} />
+                );
+              }}
+            />
+          ) : (
+            <Text>No records</Text>
+          )}
+        </>
       )}
     </NativeBaseProvider>
   );
