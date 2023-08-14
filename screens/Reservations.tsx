@@ -1,11 +1,6 @@
-import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import {
-  FlatList,
-  NativeBaseProvider,
-  ScrollView,
-  useLayout,
-} from "native-base";
+import { FlatList, NativeBaseProvider, useToast } from "native-base";
 import { useEffect, useState } from "react";
 
 import moment from "moment";
@@ -16,11 +11,28 @@ import axios from "axios";
 
 const Tab = createMaterialTopTabNavigator();
 
-const ReservationComponent = ({ route: { params } }: any) => {
+const ReservationComponent = (props: any) => {
+  const {
+    route: { params },
+  } = props;
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      setIsLoading(true);
+      setIndex(0);
+      _setReservations([]);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
+
   const [_reservations, _setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [index, setIndex] = useState(0);
-  console.log({ isLoading });
+  const [localLoading, setIsLocalLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
     try {
@@ -28,10 +40,15 @@ const ReservationComponent = ({ route: { params } }: any) => {
         const {
           data: { content },
         } = await axios.get(
-          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1=${params.city}&select_2=${params.country}`,
+          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1=${
+            params.city || ""
+          }&select_2=${params.country || ""}`,
         );
-        _setReservations([..._reservations, ...content]);
-        setIndex(index + 1);
+        if (content.length) {
+          _setReservations([..._reservations, ...content]);
+          setIndex(index + 1);
+        } else {
+        }
       })();
     } catch (err) {
       console.error(err);
@@ -43,18 +60,30 @@ const ReservationComponent = ({ route: { params } }: any) => {
   }, []);
 
   const loadAdditionalReservation = () => {
+    setIsLocalLoading(true);
     try {
       (async () => {
         const {
           data: { content },
         } = await axios.get(
-          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1}=${params.city}&select_2=${params.country}`,
+          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1}=${
+            params.city || ""
+          }&select_2=${params.country || ""}`,
         );
-        _setReservations([..._reservations, ...content]);
-        setIndex(index + 1);
+        console.log(content.length);
+        setTimeout(() => {
+          setIsLocalLoading(false);
+          if (content.length) {
+            _setReservations([..._reservations, ...content]);
+            setIndex(index + 1);
+          } else {
+            Alert.alert("No more records");
+          }
+        }, 2000);
       })();
     } catch (err) {
       console.error(err);
+    } finally {
     }
   };
 
@@ -68,16 +97,23 @@ const ReservationComponent = ({ route: { params } }: any) => {
           onEndReached={loadAdditionalReservation}
           contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
           data={_reservations}
-          renderItem={({ item }) =>
-            item.isDate ? (
+          renderItem={({ item, index }) => {
+            if (index + 1 === _reservations.length && localLoading) {
+              return (
+                <View style={{ height: 100 }}>
+                  <ActivityIndicator />
+                </View>
+              );
+            }
+            return item.isDate ? (
               <Text style={styles.date}>
                 {moment(Date.parse(item.date)).format("dddd")}{" "}
                 {moment(Date.parse(item.date)).format("ll")}
               </Text>
             ) : (
               <ReservationItem {...item} />
-            )
-          }
+            );
+          }}
         />
       )}
     </NativeBaseProvider>
