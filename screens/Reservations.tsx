@@ -16,49 +16,261 @@ const ReservationComponent = (props: any) => {
     route: { params },
   } = props;
 
+  const [_reservations, _setReservations] = useState<Reservation[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [localLoading, setIsLocalLoading] = useState(false);
+
   useEffect(() => {
     const unsubscribe = props.navigation.addListener("focus", () => {
-      setIsLoading(true);
-      setIndex(0);
-      _setReservations([]);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 3000);
+      if (!_reservations.length) {
+        setIsLoading(true);
+        try {
+          (async () => {
+            const {
+              data: { content },
+            } = await axios.get(
+              `http://146.59.83.238:8086/get_objects_test?page=${0}&select_1=${
+                params.city || ""
+              }&select_2=${params.country || ""}`,
+            );
+            if (content.length) {
+              _setReservations([..._reservations, ...content]);
+              setIndex(index + 1);
+            } else {
+              Alert.alert("No more records");
+            }
+          })();
+        } catch (err) {
+          console.error(err.response);
+        } finally {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 3000);
+        }
+      }
     });
 
     return unsubscribe;
   }, [props.navigation]);
 
-  const [_reservations, _setReservations] = useState<Reservation[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [index, setIndex] = useState(0);
-  const [localLoading, setIsLocalLoading] = useState(false);
-  useEffect(() => {
-    setIsLoading(true);
+  const loadAdditionalReservation = () => {
+    setIsLocalLoading(true);
     try {
       (async () => {
         const {
           data: { content },
         } = await axios.get(
-          `http://146.59.83.238:8086/get_objects_test?page=${0}&select_1=${
+          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1=${
             params.city || ""
           }&select_2=${params.country || ""}`,
         );
-        if (content.length) {
-          _setReservations([..._reservations, ...content]);
-          setIndex(index + 1);
-        } else {
-          Alert.alert("No more records");
-        }
+        console.log(content.length);
+        setTimeout(() => {
+          setIsLocalLoading(false);
+          if (content.length) {
+            _setReservations([..._reservations, ...content]);
+            setIndex(index + 1);
+          } else {
+            Alert.alert("No more records");
+          }
+        }, 2000);
       })();
     } catch (err) {
-      console.error(err.response);
+      console.error(err);
     } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 3000);
     }
-  }, []);
+  };
+
+  return (
+    <NativeBaseProvider>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          {_reservations.length ? (
+            <FlatList
+              onEndReachedThreshold={0.5}
+              onEndReached={loadAdditionalReservation}
+              contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
+              data={_reservations}
+              renderItem={({ item, index }) => {
+                if (index + 1 === _reservations.length && localLoading) {
+                  return (
+                    <View style={{ height: 100 }}>
+                      <ActivityIndicator />
+                    </View>
+                  );
+                }
+                return item.isDate ? (
+                  <Text style={styles.date}>
+                    {moment(Date.parse(item.date)).format("dddd")}{" "}
+                    {moment(Date.parse(item.date)).format("ll")}
+                  </Text>
+                ) : (
+                  <ReservationItem {...item} />
+                );
+              }}
+            />
+          ) : (
+            <Text>No records</Text>
+          )}
+        </>
+      )}
+    </NativeBaseProvider>
+  );
+};
+const ReservationComponent1 = (props: any) => {
+  const {
+    route: { params },
+  } = props;
+
+  const [_reservations, _setReservations] = useState<Reservation[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [localLoading, setIsLocalLoading] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      if (!_reservations.length) {
+        setIsLoading(true);
+        try {
+          (async () => {
+            const {
+              data: { content },
+            } = await axios.get(
+              `http://146.59.83.238:8086/get_objects_test?page=${0}&select_1=${
+                params.city || ""
+              }&select_2=${params.country || ""}`,
+            );
+            if (content.length) {
+              _setReservations([..._reservations, ...content]);
+              setIndex(index + 1);
+            } else {
+              Alert.alert("No more records");
+            }
+          })();
+        } catch (err) {
+          console.error(err.response);
+        } finally {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 3000);
+        }
+      }
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
+
+  const loadAdditionalReservation = () => {
+    setIsLocalLoading(true);
+    try {
+      (async () => {
+        const {
+          data: { content },
+        } = await axios.get(
+          `http://146.59.83.238:8086/get_objects_test?page=${index}&select_1=${
+            params.city || ""
+          }&select_2=${params.country || ""}`,
+        );
+        console.log(content.length);
+        setTimeout(() => {
+          setIsLocalLoading(false);
+          if (content.length) {
+            _setReservations([..._reservations, ...content]);
+            setIndex(index + 1);
+          } else {
+            Alert.alert("No more records");
+          }
+        }, 2000);
+      })();
+    } catch (err) {
+      console.error(err);
+    } finally {
+    }
+  };
+
+  return (
+    <NativeBaseProvider>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          {_reservations.length ? (
+            <FlatList
+              onEndReachedThreshold={0.5}
+              onEndReached={loadAdditionalReservation}
+              contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
+              data={_reservations}
+              renderItem={({ item, index }) => {
+                if (index + 1 === _reservations.length && localLoading) {
+                  return (
+                    <View style={{ height: 100 }}>
+                      <ActivityIndicator />
+                    </View>
+                  );
+                }
+                return item.isDate ? (
+                  <Text style={styles.date}>
+                    {moment(Date.parse(item.date)).format("dddd")}{" "}
+                    {moment(Date.parse(item.date)).format("ll")}
+                  </Text>
+                ) : (
+                  <ReservationItem {...item} />
+                );
+              }}
+            />
+          ) : (
+            <Text>No records</Text>
+          )}
+        </>
+      )}
+    </NativeBaseProvider>
+  );
+};
+const ReservationComponent2 = (props: any) => {
+  const {
+    route: { params },
+  } = props;
+
+  const [_reservations, _setReservations] = useState<Reservation[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [localLoading, setIsLocalLoading] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener("focus", () => {
+      if (!_reservations.length) {
+        setIsLoading(true);
+        try {
+          (async () => {
+            const {
+              data: { content },
+            } = await axios.get(
+              `http://146.59.83.238:8086/get_objects_test?page=${0}&select_1=${
+                params.city || ""
+              }&select_2=${params.country || ""}`,
+            );
+            if (content.length) {
+              _setReservations([..._reservations, ...content]);
+              setIndex(index + 1);
+            } else {
+              Alert.alert("No more records");
+            }
+          })();
+        } catch (err) {
+          console.error(err.response);
+        } finally {
+          setTimeout(() => {
+            setIsLoading(false);
+          }, 3000);
+        }
+      }
+    });
+
+    return unsubscribe;
+  }, [props.navigation]);
 
   const loadAdditionalReservation = () => {
     setIsLocalLoading(true);
@@ -129,9 +341,9 @@ const ReservationComponent = (props: any) => {
 
 const Incoming = (props: any) => <ReservationComponent {...props} />;
 
-const History = (props: any) => <ReservationComponent {...props} />;
+const History = (props: any) => <ReservationComponent1 {...props} />;
 
-const Removed = (props: any) => <ReservationComponent {...props} />;
+const Removed = (props: any) => <ReservationComponent2 {...props} />;
 
 const Reservations = ({ route: { params } }) => {
   return (
