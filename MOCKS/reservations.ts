@@ -247,7 +247,7 @@ export const splitReservationsByDate = (
 
 // Split reservations by date with date and content as array
 
-const returnFlatList = (reservations: any): Reservation[] => {
+export const returnFlatList = (reservations: any): Reservation[] => {
   const reservationList = [];
   reservations.forEach(({ date, content }) => {
     reservationList.push({ date, isDate: true });

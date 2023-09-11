@@ -8,6 +8,7 @@ import { Reservation } from "../types/reservation";
 import ReservationItem from "../components/ReservationItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import axios from "axios";
+import { returnFlatList, splitReservationsByDate } from "../MOCKS/reservations";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -93,7 +94,7 @@ const ReservationComponent = (props: any) => {
               onEndReachedThreshold={0.5}
               onEndReached={loadAdditionalReservation}
               contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
-              data={_reservations}
+              data={returnFlatList(splitReservationsByDate(_reservations))}
               renderItem={({ item, index }) => {
                 if (index + 1 === _reservations.length && localLoading) {
                   return (
@@ -102,6 +103,7 @@ const ReservationComponent = (props: any) => {
                     </View>
                   );
                 }
+
                 return item.isDate ? (
                   <Text style={styles.date}>
                     {moment(Date.parse(item.date)).format("dddd")}{" "}
@@ -202,7 +204,7 @@ const ReservationComponent1 = (props: any) => {
               onEndReachedThreshold={0.5}
               onEndReached={loadAdditionalReservation}
               contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
-              data={_reservations}
+              data={returnFlatList(splitReservationsByDate(_reservations))}
               renderItem={({ item, index }) => {
                 if (index + 1 === _reservations.length && localLoading) {
                   return (
@@ -211,6 +213,7 @@ const ReservationComponent1 = (props: any) => {
                     </View>
                   );
                 }
+
                 return item.isDate ? (
                   <Text style={styles.date}>
                     {moment(Date.parse(item.date)).format("dddd")}{" "}
@@ -311,7 +314,7 @@ const ReservationComponent2 = (props: any) => {
               onEndReachedThreshold={0.5}
               onEndReached={loadAdditionalReservation}
               contentContainerStyle={{ paddingBottom: index > 5 ? 0 : 500 }}
-              data={_reservations}
+              data={returnFlatList(splitReservationsByDate(_reservations))}
               renderItem={({ item, index }) => {
                 if (index + 1 === _reservations.length && localLoading) {
                   return (
